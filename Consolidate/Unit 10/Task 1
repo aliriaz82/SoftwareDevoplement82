@@ -1,1 +1,115 @@
+import tkinter as tk
+from tkinter import messagebox
+import json
+import os
+
+# ------------------------------
+# GLOBAL VARIABLES
+# ------------------------------
+TASK_FILE = "tasks.json"
+tasks = []
+
+# ------------------------------
+# LOAD TASKS FROM FILE
+# ------------------------------
+def load_tasks():
+    global tasks
+    if os.path.exists(TASK_FILE):
+        with open(TASK_FILE, "r") as f:
+            tasks = json.load(f)
+
+# ------------------------------
+# SAVE TASKS TO FILE
+# ------------------------------
+def save_tasks():
+    with open(TASK_FILE, "w") as f:
+        json.dump(tasks, f, indent=4)
+
+# ------------------------------
+# ADD TASK
+# ------------------------------
+def add_task():
+    task_name = task_entry.get().strip()
+    priority = priority_var.get()
+    if task_name == "":
+        messagebox.showwarning("Input Error", "Please enter a task")
+        return
+    tasks.append({"name": task_name, "priority": priority, "completed": False})
+    task_entry.delete(0, tk.END)
+    refresh_task_list()
+    save_tasks()
+
+# ------------------------------
+# DELETE TASK
+# ------------------------------
+def delete_task():
+    selected = task_listbox.curselection()
+    if not selected:
+        messagebox.showwarning("Selection Error", "Select a task to delete")
+        return
+    index = selected[0]
+    tasks.pop(index)
+    refresh_task_list()
+    save_tasks()
+
+# ------------------------------
+# MARK TASK AS COMPLETED
+# ------------------------------
+def mark_completed():
+    selected = task_listbox.curselection()
+    if not selected:
+        messagebox.showwarning("Selection Error", "Select a task to mark as completed")
+        return
+    index = selected[0]
+    tasks[index]["completed"] = True
+    refresh_task_list()
+    save_tasks()
+
+# ------------------------------
+# REFRESH TASK LIST
+# ------------------------------
+def refresh_task_list():
+    task_listbox.delete(0, tk.END)
+    for task in tasks:
+        name = task["name"]
+        if task["completed"]:
+            name += " ✅"
+        task_listbox.insert(tk.END, f"{name} [{task['priority']}]")
+
+# ------------------------------
+# GUI SETUP
+# ------------------------------
+root = tk.Tk()
+root.title("Smart To-Do & Reminder App")
+root.geometry("500x500")
+
+# Header
+tk.Label(root, text="📝 Smart To-Do & Reminder", font=("Helvetica", 16)).pack(pady=10)
+
+# Task Entry
+task_entry = tk.Entry(root, width=40)
+task_entry.pack(pady=5)
+
+# Priority Selection
+priority_var = tk.StringVar(value="Medium")
+tk.Label(root, text="Priority:").pack()
+tk.OptionMenu(root, priority_var, "High", "Medium", "Low").pack(pady=5)
+
+# Buttons Frame
+btn_frame = tk.Frame(root)
+btn_frame.pack(pady=10)
+tk.Button(btn_frame, text="Add Task", width=12, command=add_task).grid(row=0, column=0, padx=5)
+tk.Button(btn_frame, text="Delete Task", width=12, command=delete_task).grid(row=0, column=1, padx=5)
+tk.Button(btn_frame, text="Mark Completed", width=15, command=mark_completed).grid(row=0, column=2, padx=5)
+
+# Task List
+task_listbox = tk.Listbox(root, width=60)
+task_listbox.pack(pady=10)
+
+# Load tasks and refresh list
+load_tasks()
+refresh_task_list()
+
+# Start GUI loop
+root.mainloop()
 
