@@ -1,1 +1,104 @@
+"""
+=========================================
+Simple To-Do List Manager with GUI
+=========================================
+
+Features:
+1. Add tasks
+2. Mark tasks as completed
+3. Delete tasks
+4. Display tasks in a user-friendly interface
+5. Focus on usability and intuitive design
+"""
+
+import tkinter as tk
+from tkinter import messagebox
+
+# ---------------------------------------
+# GLOBAL VARIABLES
+# ---------------------------------------
+tasks = []
+
+# ---------------------------------------
+# FUNCTION: Add Task
+# ---------------------------------------
+def add_task():
+    task = task_entry.get().strip()  # Get user input and remove spaces
+    if task == "":
+        messagebox.showwarning("Input Error", "Please enter a task!")
+        return
+    tasks.append({"name": task, "completed": False})
+    task_entry.delete(0, tk.END)  # Clear input
+    refresh_task_list()
+
+# ---------------------------------------
+# FUNCTION: Delete Selected Task
+# ---------------------------------------
+def delete_task():
+    selected = task_listbox.curselection()  # Get selected index
+    if not selected:
+        messagebox.showwarning("Selection Error", "Please select a task to delete!")
+        return
+    index = selected[0]
+    tasks.pop(index)
+    refresh_task_list()
+
+# ---------------------------------------
+# FUNCTION: Mark Task as Completed
+# ---------------------------------------
+def mark_completed():
+    selected = task_listbox.curselection()
+    if not selected:
+        messagebox.showwarning("Selection Error", "Please select a task to mark as completed!")
+        return
+    index = selected[0]
+    tasks[index]["completed"] = True
+    refresh_task_list()
+
+# ---------------------------------------
+# FUNCTION: Refresh Task List
+# ---------------------------------------
+def refresh_task_list():
+    task_listbox.delete(0, tk.END)
+    for task in tasks:
+        name = task["name"]
+        if task["completed"]:
+            name += " ✅"  # Show completed tasks visually
+        task_listbox.insert(tk.END, name)
+
+# ---------------------------------------
+# MAIN GUI SETUP
+# ---------------------------------------
+root = tk.Tk()
+root.title("Simple To-Do List Manager")
+root.geometry("400x400")
+root.resizable(False, False)
+
+# Header Label
+header_label = tk.Label(root, text="📝 My To-Do List", font=("Helvetica", 16))
+header_label.pack(pady=10)
+
+# Task Input
+task_entry = tk.Entry(root, width=40)
+task_entry.pack(pady=5)
+
+# Buttons Frame
+button_frame = tk.Frame(root)
+button_frame.pack(pady=5)
+
+add_button = tk.Button(button_frame, text="Add Task", width=12, command=add_task)
+add_button.grid(row=0, column=0, padx=5)
+
+delete_button = tk.Button(button_frame, text="Delete Task", width=12, command=delete_task)
+delete_button.grid(row=0, column=1, padx=5)
+
+complete_button = tk.Button(button_frame, text="Mark Completed", width=15, command=mark_completed)
+complete_button.grid(row=0, column=2, padx=5)
+
+# Task Listbox
+task_listbox = tk.Listbox(root, width=50)
+task_listbox.pack(pady=10)
+
+# Start the GUI loop
+root.mainloop()
 
