@@ -22,7 +22,7 @@ def load_inventory():
                 price = float(row[2])
                 inventory[product] = [quantity, price]
 
-# ------------------------------
+# -----------------------------
 # SAVE INVENTORY TO FILE
 # ------------------------------
 def save_inventory():
