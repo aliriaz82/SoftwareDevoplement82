@@ -1,1 +1,102 @@
+"""
+=========================================
+Fibonacci Numbers using Recursion
+=========================================
+
+This program demonstrates:
+1. Simple recursion
+2. Optimized recursion using memoization
+3. Iterative approach for performance comparison
+
+It highlights:
+- Importance of base cases
+- Performance issues in naive recursion
+- Benefits of optimization
+"""
+
+import time
+
+# -----------------------------------------
+# SIMPLE RECURSIVE FIBONACCI (LEARNING ONLY)
+# -----------------------------------------
+def fibonacci_recursive(n):
+    """
+    Calculates Fibonacci number using simple recursion.
+    WARNING: Inefficient for large n.
+    """
+
+    # BASE CASES (stop recursion)
+    if n == 0:
+        return 0
+    elif n == 1:
+        return 1
+
+    # RECURSIVE CASE
+    return fibonacci_recursive(n - 1) + fibonacci_recursive(n - 2)
+
+
+# -----------------------------------------
+# OPTIMIZED RECURSIVE FIBONACCI (MEMOIZATION)
+# -----------------------------------------
+def fibonacci_memo(n, memo={}):
+    """
+    Calculates Fibonacci number using recursion + memoization.
+    Efficient and avoids repeated calculations.
+    """
+
+    # BASE CASES
+    if n == 0:
+        return 0
+    elif n == 1:
+        return 1
+
+    # Return stored value if already calculated
+    if n in memo:
+        return memo[n]
+
+    # Store and return result
+    memo[n] = fibonacci_memo(n - 1, memo) + fibonacci_memo(n - 2, memo)
+    return memo[n]
+
+
+# -----------------------------------------
+# ITERATIVE FIBONACCI (NON-RECURSIVE)
+# -----------------------------------------
+def fibonacci_iterative(n):
+    """
+    Calculates Fibonacci number using a loop.
+    Most efficient approach.
+    """
+
+    if n == 0:
+        return 0
+    elif n == 1:
+        return 1
+
+    a, b = 0, 1
+    for _ in range(2, n + 1):
+        a, b = b, a + b
+
+    return b
+
+
+# -----------------------------------------
+# MAIN PROGRAM
+# -----------------------------------------
+num = int(input("Enter a non-negative integer: "))
+
+print("\n--- Simple Recursive Fibonacci ---")
+start = time.time()
+print("Result:", fibonacci_recursive(num))
+print("Time taken:", round(time.time() - start, 5), "seconds")
+
+print("\n--- Optimized Recursive Fibonacci (Memoization) ---")
+start = time.time()
+print("Result:", fibonacci_memo(num))
+print("Time taken:", round(time.time() - start, 5), "seconds")
+
+print("\n--- Iterative Fibonacci ---")
+start = time.time()
+print("Result:", fibonacci_iterative(num))
+print("Time taken:", round(time.time() - start, 5), "seconds")
 
