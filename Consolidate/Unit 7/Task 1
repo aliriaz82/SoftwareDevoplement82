@@ -9,7 +9,7 @@ max_attempts = 5
 # Counter to track attempts
 attempts = 0
 
-print("🎮 Welcome to Guess the Number!")
+print(" Welcome to Guess the Number!")
 print("Guess a number between 1 and 50")
 print(f"You have {max_attempts} attempts.\n")
 
@@ -20,7 +20,7 @@ while attempts < max_attempts:
 
     # Validate input
     if not guess.isdigit():
-        print("⚠️ Please enter a valid number.")
+        print(" Please enter a valid number.")
         continue
 
     guess = int(guess)
@@ -32,11 +32,11 @@ while attempts < max_attempts:
     elif guess > secret_number:
         print("Too high!")
     else:
-        print(f"🎉 Congratulations! You guessed the number in {attempts} attempts.")
+        print(f" Congratulations! You guessed the number in {attempts} attempts.")
         break
 
 # Loop finishes when attempts reach maximum
 if attempts == max_attempts and guess != secret_number:
-    print("\n❌ You've used all attempts.")
+    print("\n You've used all attempts.")
     print(f"The correct number was: {secret_number}")
 
